@@ -1,0 +1,43 @@
+/* ============================================================
+   Oxy Loop — base element defaults & helper classes.
+   Light-touch baseline so specimens and kits share typography.
+   ============================================================ */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-text);
+  font-size: var(--text-body);
+  line-height: var(--lh-body);
+  font-weight: var(--fw-regular);
+  color: var(--text-primary);
+  background: var(--surface-page);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  color: var(--text-heading);
+  line-height: var(--lh-heading);
+  letter-spacing: var(--ls-tight);
+  font-weight: var(--fw-bold);
+  margin: 0;
+  text-wrap: balance;
+}
+
+h1 { font-size: var(--text-h1); line-height: var(--lh-tight); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
+
+p { margin: 0; text-wrap: pretty; }
+
+a { color: inherit; }
+
+/* ---- Helper classes ---- */
+.oxy-hero   { font-family: var(--font-display); font-weight: var(--fw-extrabold); font-size: var(--text-hero); line-height: var(--lh-tight); letter-spacing: var(--ls-tight); color: var(--text-heading); }
+.oxy-eyebrow{ font-family: var(--font-text); font-weight: var(--fw-bold); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--oxy-cyan); }
+.oxy-label  { font-family: var(--font-text); font-weight: var(--fw-bold); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; color: var(--muted-gray); }
+.oxy-caption{ font-size: var(--text-caption); color: var(--text-secondary); }
+.oxy-muted  { color: var(--text-secondary); }

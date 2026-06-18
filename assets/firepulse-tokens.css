@@ -1,0 +1,196 @@
+/* ============================================================================
+   FIREPULSE DESIGN SYSTEM — Colors & Typography
+   MR Fireground Training with Realistic Physical Load
+   Source: Firepulse_Brand_Guide.pdf v1.0
+   ----------------------------------------------------------------------------
+   FONT NOTE: The brand guide specifies "bold italic sans-serif" for the
+   wordmark and a "clean sans-serif" for body but names no specific families.
+   Substituted nearest Google Fonts matches (FLAG to user for replacement):
+     - Display / wordmark : Saira            (fast, forceful, technical italic)
+     - Body               : Barlow           (clean humanist sans, good leading)
+     - HUD / data / mono  : JetBrains Mono   (mission-tool numerics & labels)
+   ========================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Saira:ital,wght@0,400;0,500;0,600;0,700;0,800;1,600;1,700;1,800&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* ---- ENVIRONMENT (dark base) -------------------------------------------- */
+  --carbon-black:  #090706;  /* primary background                            */
+  --smoke-brown:   #160B07;  /* gradient base                                 */
+  --burnt-panel:   #241007;  /* cards & overlays                              */
+  --ember-panel:   #311708;  /* raised panel / hover surface (derived)        */
+  --panel-line:    #4a2410;  /* hairline border on dark (derived)             */
+
+  /* ---- FIRE SIGNAL (accents) ---------------------------------------------- */
+  --fire-orange:   #F36A13;  /* main brand accent                             */
+  --heat-amber:    #FF8A18;  /* highlights / progress                         */
+  --warning-gold:  #FFC35A;  /* distance / attention                          */
+
+  /* ---- TEXT --------------------------------------------------------------- */
+  --ash-white:     #F2EEE8;  /* primary text                                  */
+  --smoke-gray:    #B7AEA8;  /* secondary text                                */
+  --muted-gray:    #6e655f;  /* captions / page numbers (derived)             */
+
+  /* ---- STATE -------------------------------------------------------------- */
+  --alert-red:     #E04422;  /* danger state                                  */
+  --complete-green:#58B44B;  /* success / completed state                     */
+
+  /* ---- SEMANTIC ROLES ----------------------------------------------------- */
+  --bg:            var(--carbon-black);
+  --bg-grad-base:  var(--smoke-brown);
+  --surface:       var(--burnt-panel);
+  --surface-raised:var(--ember-panel);
+  --border:        var(--panel-line);
+  --border-signal: color-mix(in srgb, var(--fire-orange) 55%, transparent);
+  --accent:        var(--fire-orange);
+  --accent-hover:  var(--heat-amber);
+  --fg:            var(--ash-white);
+  --fg-muted:      var(--smoke-gray);
+  --fg-faint:      var(--muted-gray);
+  --danger:        var(--alert-red);
+  --success:       var(--complete-green);
+
+  /* Signature heat gradients & glows */
+  --grad-environment: radial-gradient(120% 100% at 70% 0%, #2a1409 0%, var(--smoke-brown) 45%, var(--carbon-black) 100%);
+  --grad-ember:       linear-gradient(180deg, var(--fire-orange) 0%, #c84e0a 100%);
+  --glow-orange:      0 0 0 1px var(--border-signal), 0 0 18px -2px color-mix(in srgb, var(--fire-orange) 60%, transparent);
+  --glow-amber-text:  0 0 16px color-mix(in srgb, var(--heat-amber) 50%, transparent);
+
+  /* ---- TYPE FAMILIES ------------------------------------------------------ */
+  --font-display: 'Saira', 'Arial Narrow', sans-serif;
+  --font-body:    'Barlow', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+  /* ---- TYPE SCALE (screen px, derived from the guide's pt relationships) -- */
+  --fs-hero:    clamp(40px, 6vw, 72px);  /* hero wordmark      46pt           */
+  --fs-section: clamp(26px, 3.2vw, 40px);/* section title      25pt / orange  */
+  --fs-h1:      clamp(24px, 2.6vw, 34px);/* main headline      22pt / bold    */
+  --fs-h2:      22px;                     /* sub headline                      */
+  --fs-sub:     16px;                     /* subheadline        14pt / orange  */
+  --fs-body:    16px;                     /* body               9.5pt          */
+  --fs-small:   14px;
+  --fs-caption: 12px;                     /* caption            7.5pt / muted  */
+  --fs-hud:     13px;                     /* HUD data labels                   */
+
+  /* ---- RADII / SPACING / ELEVATION ---------------------------------------- */
+  --r-xs: 3px;
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-pill: 999px;
+
+  --space-1: 4px;  --space-2: 8px;  --space-3: 12px; --space-4: 16px;
+  --space-5: 24px; --space-6: 32px; --space-7: 48px; --space-8: 64px;
+
+  --shadow-panel: 0 18px 50px -20px rgba(0,0,0,0.85);
+  --shadow-card:  0 8px 24px -12px rgba(0,0,0,0.8);
+  --shadow-hud:   inset 0 0 0 1px var(--border-signal), 0 10px 40px -16px rgba(0,0,0,0.9);
+}
+
+/* ============================================================================
+   SEMANTIC ELEMENT STYLES — apply with .fp- scope or copy into components
+   ========================================================================== */
+
+.fp-root {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Wordmark — bold italic, forceful, technical. Never rounded/playful. */
+.fp-wordmark {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -0.01em;
+  line-height: 0.95;
+  font-size: var(--fs-hero);
+  color: var(--fg);
+}
+.fp-wordmark--orange { color: var(--fire-orange); }
+
+/* Section title — bold italic, orange, set top-left of a dark field */
+.fp-section-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-style: italic;
+  font-size: var(--fs-section);
+  letter-spacing: 0.005em;
+  color: var(--fire-orange);
+  line-height: 1.02;
+}
+
+/* Main headline — bold, controlled, NOT italic */
+.fp-h1 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-h1);
+  letter-spacing: 0;
+  color: var(--fg);
+  line-height: 1.1;
+  text-wrap: balance;
+}
+
+.fp-h2 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: var(--fs-h2);
+  color: var(--fg);
+  line-height: 1.15;
+}
+
+/* Subheadline — regular, orange */
+.fp-sub {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: var(--fs-sub);
+  color: var(--fire-orange);
+  letter-spacing: 0.01em;
+}
+
+.fp-body {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-body);
+  color: var(--fg-muted);
+  line-height: 1.65;
+  text-wrap: pretty;
+}
+
+.fp-caption {
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: var(--fs-caption);
+  color: var(--fg-faint);
+  font-style: italic;
+}
+
+/* HUD data — short, uppercase, mono, mission-critical */
+.fp-hud-label {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.fp-hud-value {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: var(--fs-hud);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg);
+}
+
+/* Eyebrow / kicker label */
+.fp-kicker {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--fire-orange);
+}

@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oxy Loop — Plateau-Circulating Shared Oxygen Service</title>
+<link rel="stylesheet" href="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/tokens/fonts.css" />
+<link rel="stylesheet" href="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/tokens/colors.css" />
+<link rel="stylesheet" href="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/tokens/typography.css" />
+<link rel="stylesheet" href="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/tokens/spacing.css" />
+<link rel="stylesheet" href="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/tokens/base.css" />
+<link rel="stylesheet" href="assets/oxy.css" />
+</head>
+<body>
+<div class="atmos"></div>
+<div class="grain"></div>
+<div class="rail"><div class="rail-fill"></div></div>
+
+<header class="topbar">
+  <a href="#cover" class="brand"><span class="mk">O<sub>2</sub></span><b>Oxy Loop</b></a>
+  <nav class="links">
+    <a href="#problem" class="nav-link">Problem</a>
+    <a href="#loop" class="nav-link">The loop</a>
+    <a href="#product" class="nav-link">Product</a>
+    <a href="#journey" class="nav-link">Journey</a>
+    <a href="index.html" class="back">← Firepulse</a>
+  </nav>
+</header>
+
+<main>
+
+<!-- ============ COVER ============ -->
+<section id="cover" class="cover" data-screen-label="Cover">
+  <div class="cover-grid">
+    <div class="cover-copy">
+      <div class="o2mark reveal">O<sub>2</sub></div>
+      <h1 class="reveal d1">Oxy Loop</h1>
+      <div class="tagline reveal d2">A plateau-circulating shared oxygen service</div>
+      <p class="blurb reveal d3">Reusable oxygen for high-altitude travel — rented, refilled, recycled and rewarded at public stations, so a single breath never becomes single-use waste.</p>
+      <div class="rchips reveal d4" id="cover-chips"></div>
+    </div>
+    <div class="cover-hero reveal d2">
+      <div class="loop-ring"></div>
+      <div class="loop-orbit"><span></span></div>
+      <img class="hero-canister" src="assets/oxy/canister-hero.png" alt="Oxy Loop reusable oxygen canister" />
+    </div>
+  </div>
+  <a href="#problem" class="scroll-cue"><span>Scroll</span><span class="ln"></span></a>
+</section>
+
+<!-- ============ 01 PROBLEM ============ -->
+<section id="problem" class="section" data-screen-label="Problem">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-num">01 — Background</span>
+      <h2>At altitude, a single breath leaves a lasting trace.</h2>
+      <p class="lead">High-altitude travel runs on <strong>single-use oxygen cans</strong>. Each climber empties several, then discards them — turning remote, fragile plateaus into fields of metal litter that cannot easily be carried back out.</p>
+    </div>
+    <div class="evidence">
+      <div class="evi reveal d1">
+        <div class="ph"><img src="assets/oxy/waste.jpg" alt="Discarded single-use oxygen cans" /></div>
+        <div class="cap"><b>Resource waste</b><p>Disposable canisters are used once and thrown away — manufacturing and metal lost with every breath.</p></div>
+      </div>
+      <div class="evi reveal d2">
+        <div class="ph"><img src="assets/oxy/pollution.jpg" alt="Litter accumulating on the plateau" /></div>
+        <div class="cap"><b>Plateau litter</b><p>At altitude there is no collection. Empty cans accumulate where they fall, scarring protected environments.</p></div>
+      </div>
+    </div>
+    <div class="problem-stats reveal d3">
+      <div class="pstat"><div class="v">1×</div><div class="k">Each can is used once, then discarded at altitude</div></div>
+      <div class="pstat"><div class="v">0</div><div class="k">Collection or recycling on the mountain today</div></div>
+      <div class="pstat"><div class="v">Metal</div><div class="k">Non-degradable litter left on fragile terrain</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 THE LOOP ============ -->
+<section id="loop" class="section" data-screen-label="The loop">
+  <div class="wrap-narrow">
+    <div class="section-head center reveal">
+      <span class="eyebrow center">The idea</span>
+      <h2>Turn a disposable product into a circular service.</h2>
+      <p class="lead">Instead of selling cans, Oxy Loop runs public stations where one reusable canister keeps moving through four steps — never leaving the loop, never leaving the mountain.</p>
+      <div id="loop-badge" style="margin-top:18px;display:flex;justify-content:center"></div>
+    </div>
+
+    <div class="loopwrap reveal d1">
+      <svg class="loop-track" viewBox="0 0 100 100" aria-hidden="true">
+        <circle class="ring-bg" cx="50" cy="50" r="50" />
+        <circle class="ring-fg" cx="50" cy="50" r="50" />
+      </svg>
+      <div class="loop-center">
+        <div class="lc-o2">O<sub>2</sub></div>
+        <b>One reusable canister</b>
+        <small>kept in circulation</small>
+      </div>
+      <div class="loop-node">
+        <div class="nd">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 1 1-12 0"/><path d="M10 2v6"/><rect x="14" y="2" width="6" height="20" rx="2"/></svg></div>
+          <b>Rent</b><small>borrow a canister</small>
+        </div>
+      </div>
+      <div class="loop-node">
+        <div class="nd">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5S5 13 5 15a7 7 0 0 0 7 7z"/></svg></div>
+          <b>Refill</b><small>top up oxygen</small>
+        </div>
+      </div>
+      <div class="loop-node">
+        <div class="nd">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 19H4.8c-1.8 0-2.9-2-2-3.5l1.4-2.4"/><path d="m9 8 3-5 3 5"/><path d="m14.5 8 1.2-2.1 4 7c.9 1.5-.2 3.5-2 3.5H17"/><path d="m9 19 3 3 3-3"/><path d="M12 22v-7"/></svg></div>
+          <b>Recycle</b><small>recover mask &amp; bottle</small>
+        </div>
+      </div>
+      <div class="loop-node">
+        <div class="nd">
+          <div class="ic"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M12 8v13"/><path d="M19 12v7a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2v-7"/><path d="M7.5 8a2.5 2.5 0 0 1 0-5C11 3 12 8 12 8s1-5 4.5-5a2.5 2.5 0 0 1 0 5"/></svg></div>
+          <b>Redeem</b><small>earn a souvenir</small>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 PRODUCT ============ -->
+<section id="product" class="section" data-screen-label="Product">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-num">02 — Product</span>
+      <h2>A reusable canister built to be refilled, not thrown away.</h2>
+      <p class="lead">Translucent, light, and durable — the Oxy Loop canister carries the same friendly oxygen clarity as the brand, with a recoverable mask and a refill valve designed for station service.</p>
+    </div>
+
+    <div class="product-grid reveal d1">
+      <div class="product-media">
+        <img src="assets/oxy/canister-detail.png" alt="Oxy Loop reusable canister with valve" />
+      </div>
+      <div>
+        <div class="product-feature" id="product-stats"></div>
+      </div>
+    </div>
+
+    <div class="product-detail-row">
+      <div class="pd reveal d1">
+        <div class="ph"><img src="assets/oxy/valve-cutaway.png" alt="Labeled cutaway of the canister valve" /></div>
+        <div class="cap"><b>Refillable core</b><p>An internal pressure vessel designed to be topped up at the station — the body stays in service for life.</p></div>
+      </div>
+      <div class="pd reveal d2">
+        <div class="ph"><img src="assets/oxy/mask.png" alt="Detachable oxygen mask" /></div>
+        <div class="cap"><b>Recoverable mask</b><p>The mask detaches and drops into the recycling chute — later remade into souvenirs.</p></div>
+      </div>
+      <div class="pd reveal d3">
+        <div class="ph"><img src="assets/oxy/station-kiosk.png" alt="Oxy Loop station kiosk" /></div>
+        <div class="cap"><b>Station kiosk</b><p>Public Rent · Refill · Recycle bays with large tap targets for quick use at altitude.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 INTERACTIVE JOURNEY ============ -->
+<section id="journey" class="section" data-screen-label="Journey">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="section-num">03 — The experience</span>
+      <h2>Walk the whole loop — the real interface, step by step.</h2>
+      <p class="lead">Every screen below is the actual Oxy Loop mini-program and station UI. Click a phase, step through with the arrows, and at the recycling station, tap the slot to drop your item in — just like the real flow.</p>
+    </div>
+
+    <div class="journey-shell reveal d1">
+      <div>
+        <div class="phase-nav">
+          <div class="phase-row active" data-phase="0">
+            <div class="pn">1</div>
+            <div class="pt"><b>Rent</b><small>Find a station &amp; borrow a canister</small></div>
+          </div>
+          <div class="phase-row" data-phase="1">
+            <div class="pn">2</div>
+            <div class="pt"><b>Refill</b><small>Scan, choose, top up oxygen</small></div>
+          </div>
+          <div class="phase-row" data-phase="2">
+            <div class="pn">3</div>
+            <div class="pt"><b>Recycle</b><small>Recover the mask &amp; bottle</small></div>
+          </div>
+          <div class="phase-row" data-phase="3">
+            <div class="pn">4</div>
+            <div class="pt"><b>Redeem</b><small>Earn a souvenir from recycled plastic</small></div>
+          </div>
+        </div>
+
+        <div class="journey-copy">
+          <span class="surface-tag">On your phone</span>
+          <h3>Find a nearby station</h3>
+          <p>Open the mini-program and locate the closest plateau oxygen station.</p>
+        </div>
+      </div>
+
+      <div class="device-stage">
+        <div class="device phone">
+          <div class="screen">
+            <div class="scr-img"></div>
+            <div class="scr-img"></div>
+          </div>
+        </div>
+        <div class="device-controls">
+          <button class="dctl prev" aria-label="Previous step"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg></button>
+          <div class="subdots"></div>
+          <button class="dctl next" aria-label="Next step"><span class="nx-label">Next</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></button>
+        </div>
+        <div class="device-meta"><span class="dm-surface">On your phone</span><span class="dm-count">Step 1 / 9</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 IMPACT ============ -->
+<section id="impact" class="section" data-screen-label="Impact">
+  <div class="wrap">
+    <div class="impact reveal">
+      <span class="eyebrow">Closing the loop</span>
+      <h2>Every breath stays in circulation, not on the mountain.</h2>
+      <p>By renting and refilling one durable canister — and recovering its mask and bottle at the station — Oxy Loop replaces a stream of discarded cans with a single object that keeps coming back. The plastic travelers return is reborn as the souvenir they take home.</p>
+      <div class="impact-stats">
+        <div class="is"><div class="v">Reusable</div><div class="k">One canister replaces a lifetime of single-use cans</div></div>
+        <div class="is"><div class="v">Recovered</div><div class="k">Masks &amp; bottles collected back into the loop at every station</div></div>
+        <div class="is"><div class="v">Reborn</div><div class="k">Recycled masks become the redeemable souvenir</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="big">Oxy Loop<span class="tag">A clean, calm, circular oxygen service.</span></div>
+      <div class="credits">
+        Concept &amp; UX — Your Name<br/>
+        Plateau-circulating shared oxygen service<br/>
+        Concept project · <span id="year">2026</span>
+        <br/>
+        <a href="index.html" class="other-project">← See also: Firepulse MR Training</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="tweaks-root"></div>
+
+<script src="assets/oxy.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="_ds/oxy-loop-design-system-0d2024ea-b401-4e98-a947-731d1eab85c4/_ds_bundle.js"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="oxy-ds.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="oxy-tweaks.jsx"></script>
+<script>
+(async () => {
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  @page { margin: 0.5cm; }\n  html, body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }\n  section, article, figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,54 @@
+/* ============================================================
+   Oxy Loop — Color tokens
+   Cool, clean, low-noise. Cyan = system signature / active /
+   success. Deep green = high-contrast CTAs + primary text.
+   Pale mint = environmental background.
+   Recommended ratio: 55% mist · 25% white · 12% deep oxygen · 8% cyan
+   ============================================================ */
+
+:root {
+  /* ---- Brand cyan ramp ---- */
+  --oxy-cyan: #35CBD0;        /* primary brand, selected state, QR border */
+  --aqua-light: #53D9D6;      /* button fill, glow, product liquid */
+  --aqua-soft: #8FE6E4;       /* derived: soft fills, hover wash */
+  --aqua-wash: #D6F4F3;       /* derived: tint backgrounds, badges */
+
+  /* ---- Deep greens (text + contrast) ---- */
+  --deep-oxygen: #001F1D;     /* primary text, CTA buttons, bottom sheets */
+  --pine-text: #173230;       /* headlines, information cards */
+
+  /* ---- Neutrals (cool) ---- */
+  --mist-bg: #EAF7F7;         /* UI background, kiosk panels */
+  --ice-white: #F5FCFC;       /* cards, page fields, snow / alpine space */
+  --border-mint: #C5DEDE;     /* frames, dividers, disabled outlines */
+  --muted-gray: #6F807F;      /* secondary copy, labels, details */
+  --pure-white: #FFFFFF;
+
+  /* ---- Semantic accents ---- */
+  --status-success: #61D392;  /* sufficient oxygen */
+  --status-warning: #F0CE4E;  /* low oxygen warning */
+  --status-error:   #EF6D6D;  /* error / missing item */
+
+  /* ---- Semantic aliases (use these in components) ---- */
+  --text-primary: var(--deep-oxygen);
+  --text-heading: var(--pine-text);
+  --text-secondary: var(--muted-gray);
+  --text-on-dark: var(--ice-white);
+  --text-on-brand: var(--pure-white);
+
+  --surface-page: var(--mist-bg);
+  --surface-card: var(--ice-white);
+  --surface-raised: var(--pure-white);
+  --surface-inverse: var(--deep-oxygen);  /* bottom sheets, CTA zones */
+  --surface-brand: var(--oxy-cyan);
+  --surface-brand-wash: var(--aqua-wash);
+
+  --border-default: var(--border-mint);
+  --border-active: var(--oxy-cyan);
+  --border-disabled: var(--border-mint);
+
+  --action-primary: var(--deep-oxygen);   /* primary CTA */
+  --action-brand: var(--aqua-light);       /* brand / liquid button fill */
+  --action-selected: var(--oxy-cyan);
+  --focus-ring: var(--oxy-cyan);
+}

@@ -1,0 +1,46 @@
+/* ============================================================
+   Oxy Loop — Webfonts
+   Display : M PLUS Rounded 1c  (composed rounded geometric — steady
+             headlines; calmer & more grounded than a bubbly rounded)
+   Text/UI : Nunito             (clean rounded sans, body + interface)
+   SUBSTITUTION NOTE: the brand stack lists SF Pro Rounded /
+   Avenir Next Rounded / Nunito Sans (not freely licensable).
+   M PLUS Rounded 1c + Nunito are the closest open matches.
+   ============================================================ */
+
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../assets/fonts/MPLUSRounded1c-400.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../assets/fonts/MPLUSRounded1c-500.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('../assets/fonts/MPLUSRounded1c-700.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'M PLUS Rounded 1c';
+  font-style: normal;
+  font-weight: 800;
+  font-display: swap;
+  src: url('../assets/fonts/MPLUSRounded1c-800.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400 900;
+  font-display: swap;
+  src: url('../assets/fonts/Nunito-Variable.woff2') format('woff2');
+}

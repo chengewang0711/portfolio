@@ -1,0 +1,124 @@
+/* ============================================================================
+   FIREPULSE — Live HUD reconstruction (animated + interactive)
+   Overlaid on the real fire-scene plate, matching the designed screen.
+   ========================================================================== */
+.lh-screen .lh-bg { width: 100%; height: 100%; object-fit: cover; display: block; }
+.lh-scrim { position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: radial-gradient(120% 90% at 50% 60%, transparent 55%, rgba(8,6,5,.5)),
+              linear-gradient(180deg, rgba(8,6,5,.34), rgba(8,6,5,.12) 30%, rgba(8,6,5,.3)); }
+.lh { position: absolute; inset: 0; z-index: 2; font-family: var(--font-body); color: var(--ash-white);
+  container-type: inline-size; }
+/* scale HUD type with the frame width */
+.lh { --u: 1cqw; }
+
+.lh-stage { position: absolute; inset: 0; z-index: 2; cursor: crosshair; }
+.lh-jet { position: absolute; z-index: 3; pointer-events: none; border-radius: 3px;
+  background: linear-gradient(transparent, rgba(190,225,255,.9)); width: 0.5cqw; }
+
+/* ---------- panels ---------- */
+.lh-panel { position: absolute; z-index: 4; background: color-mix(in srgb, var(--carbon-black) 46%, transparent);
+  border: 1px solid color-mix(in srgb, var(--ash-white) 22%, transparent); border-radius: 0.7cqw;
+  backdrop-filter: blur(3px); box-shadow: 0 2px 12px rgba(0,0,0,.4); }
+
+/* battery */
+.lh-batt { left: 3%; top: 5%; width: 19%; background: none; border: 0; box-shadow: none; backdrop-filter: none; }
+.lh-batt .bt-row { display: flex; align-items: center; gap: 0.7cqw; }
+.lh-batt .bt-ic { width: 2cqw; height: 2cqw; color: var(--warning-gold); }
+.lh-batt .bt-lbl { font-weight: 600; font-size: 1.55cqw; }
+.lh-batt .bt-pct { margin-left: auto; font-family: var(--font-mono); font-size: 1.35cqw; color: var(--smoke-gray); }
+.lh-batt .bt-track { margin-top: 0.7cqw; height: 1cqw; border-radius: 0.5cqw; background: rgba(0,0,0,.5);
+  border: 1px solid rgba(255,255,255,.2); overflow: hidden; }
+.lh-batt .bt-fill { height: 100%; width: 85%; border-radius: 0.5cqw;
+  background: linear-gradient(90deg, var(--warning-gold), #c9e35b 55%, var(--complete-green)); transition: width .4s ease; }
+
+/* vitals */
+.lh-vital { width: 17%; padding: 1.1cqw 1.2cqw; display: flex; align-items: center; gap: 1cqw; }
+.lh-hr { left: 3%; top: 15.5%; }
+.lh-o2 { left: 3%; top: 29%; }
+.lh-vital .vt-ic { width: 2.4cqw; height: 2.4cqw; color: var(--ash-white); opacity: .9; flex: none; }
+.lh-hr .vt-ic { color: #ff5a4d; }
+.lh-vital .vt-k { font-size: 1.35cqw; color: var(--smoke-gray); }
+.lh-vital .vt-v { font-family: var(--font-display); font-weight: 700; font-size: 2.9cqw; line-height: 1; margin-top: 0.2cqw; }
+.lh-vital .vt-v small { font-family: var(--font-mono); font-size: 1.2cqw; color: var(--smoke-gray); font-weight: 400; margin-left: 0.3cqw; }
+.motion .lh-hr .vt-ic { animation: hrbeat 1s ease-in-out infinite; transform-origin: center; }
+@keyframes hrbeat { 0%,100%{ transform: scale(1);} 14%{ transform: scale(1.22);} 28%{ transform: scale(1);} 42%{ transform: scale(1.12);} }
+
+/* task progress */
+.lh-task { right: 1.5%; top: 5.5%; width: 25%; padding: 1.1cqw 1.2cqw 1.3cqw; }
+.lh-task .tk-title { font-family: var(--font-display); font-weight: 700; letter-spacing: .12em; font-size: 1.55cqw;
+  text-transform: uppercase; border-bottom: 1px solid rgba(255,255,255,.25); padding-bottom: 0.7cqw; margin-bottom: 0.9cqw; }
+.lh-task .tk { margin-top: 0.9cqw; }
+.lh-task .tk-h { display: flex; justify-content: space-between; align-items: baseline; gap: 0.6cqw; font-size: 1.3cqw; }
+.lh-task .tk-h .cnt { font-family: var(--font-mono); color: var(--smoke-gray); }
+.lh-task .tk-h .done { font-family: var(--font-mono); font-size: 1.15cqw; color: var(--complete-green); }
+.lh-task .seg { display: flex; gap: 0.4cqw; margin-top: 0.6cqw; }
+.lh-task .seg i { flex: 1; height: 0.9cqw; border-radius: 0.2cqw; background: rgba(255,255,255,.14); overflow: hidden; position: relative; }
+.lh-task .seg i.on::after { content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, var(--warning-gold) 0 0.5cqw, color-mix(in srgb,var(--warning-gold) 60%, #000) 0.5cqw 0.8cqw); }
+.lh-task .seg.mini i { height: 0.6cqw; background: rgba(255,255,255,.12); }
+.lh-task .seg.mini i.on::after { background: var(--warning-gold); }
+.lh-task .seg.mini i.gray.on::after { background: var(--smoke-gray); }
+/* hatched fill bar for the main fire task */
+.lh-task .tk-bar { height: 1cqw; border-radius: 0.25cqw; background: rgba(255,255,255,.14); overflow: hidden; margin-top: 0.6cqw; }
+.lh-task .tk-bar-fill { height: 100%; width: 66%; transition: width .35s ease;
+  background: repeating-linear-gradient(90deg, var(--warning-gold) 0 0.5cqw, color-mix(in srgb,var(--warning-gold) 55%, #000) 0.5cqw 0.85cqw); }
+.lh-task .tk.is-done .tk-bar-fill { background: repeating-linear-gradient(90deg, var(--complete-green) 0 0.5cqw, color-mix(in srgb,var(--complete-green) 55%, #000) 0.5cqw 0.85cqw); }
+.lh-task .tk.is-done .cnt { color: var(--complete-green); }
+
+/* crosshair + trajectory svg */
+.lh-svg { position: absolute; inset: 0; z-index: 3; width: 100%; height: 100%; pointer-events: none; }
+.lh-svg .xh { fill: none; stroke: var(--ash-white); stroke-width: 3; }
+.lh-svg .water { fill: none; stroke: rgba(210,235,255,.9); stroke-width: 10; stroke-linecap: round; }
+.lh-svg .arc { fill: none; stroke: var(--fire-orange); stroke-width: 11; stroke-linecap: round; stroke-dasharray: 16 16;
+  filter: drop-shadow(0 0 6px color-mix(in srgb,var(--fire-orange) 70%, transparent)); }
+.motion .lh-svg .arc { animation: lhdash 1s linear infinite; }
+@keyframes lhdash { to { stroke-dashoffset: -64; } }
+.lh-svg .ang { fill: none; stroke: var(--fire-orange); stroke-width: 9; stroke-linecap: round; }
+.lh-angtxt { position: absolute; z-index: 4; left: 63.5%; top: 30%; font-family: var(--font-display); font-style: italic;
+  font-weight: 800; font-size: 3cqw; color: var(--ash-white); text-shadow: 0 2px 8px rgba(0,0,0,.6); }
+
+/* note box */
+.lh-note { right: 1%; top: 40%; width: 27%; z-index: 4; }
+.lh-note .nt-h { font-family: var(--font-display); font-weight: 800; letter-spacing: .1em; font-size: 1.7cqw;
+  text-decoration: underline; text-underline-offset: 0.3cqw; }
+.lh-note p { margin: 0.6cqw 0 0; font-size: 1.4cqw; color: var(--ash-white); line-height: 1.4; }
+
+/* go-upstairs prompt */
+.lh-go { position: absolute; z-index: 4; left: 23%; top: 56.5%; display: inline-flex; align-items: center; gap: 0.8cqw;
+  padding: 0.9cqw 1.4cqw; background: color-mix(in srgb, var(--carbon-black) 40%, transparent); border-radius: 0.6cqw;
+  font-family: var(--font-display); font-weight: 700; font-size: 2.4cqw; }
+.lh-go .ga { color: var(--warning-gold); font-size: 2.2cqw; }
+.motion .lh-go .ga { animation: gobob 1.4s ease-in-out infinite; }
+@keyframes gobob { 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-0.4cqw);} }
+
+/* distance marker */
+.lh-dist { position: absolute; z-index: 4; left: 6%; top: 69%; text-align: center; }
+.lh-dist .d-v { font-family: var(--font-mono); font-size: 1.4cqw; color: var(--warning-gold); background: rgba(0,0,0,.45);
+  padding: 0.3cqw 0.7cqw; border-radius: 0.3cqw; }
+.lh-dist .d-tri { width: 0; height: 0; margin: 0.5cqw auto 0; border-left: 1cqw solid transparent; border-right: 1cqw solid transparent; border-bottom: 1.4cqw solid var(--warning-gold); }
+
+/* compass */
+.lh-compass { position: absolute; z-index: 4; left: 18%; right: 18%; bottom: 5%; height: 7cqw; }
+.lh-compass .cm-pin { position: absolute; top: 0.4cqw; left: 50%; transform: translateX(-50%); width: 0; height: 0;
+  border-left: 0.9cqw solid transparent; border-right: 0.9cqw solid transparent; border-top: 1.2cqw solid var(--fire-orange); z-index: 3; }
+.lh-compass .cm-active { position: absolute; top: 2.1cqw; left: 50%; transform: translateX(-50%); width: 11cqw; height: 1cqw;
+  background: repeating-linear-gradient(90deg, var(--fire-orange) 0 0.6cqw, transparent 0.6cqw 0.9cqw); z-index: 2; opacity: .95; }
+.lh-compass .cm-mask { position: absolute; inset: 0; overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, #000 16%, #000 84%, transparent); }
+.lh-compass .cm-track { position: absolute; top: 2.1cqw; display: flex; align-items: flex-end; will-change: transform; }
+.lh-compass .tk { width: 2.2cqw; display: flex; flex-direction: column; align-items: center; }
+.lh-compass .tk i { width: 1px; height: 1cqw; background: rgba(255,255,255,.5); }
+.lh-compass .tk.major i { height: 1.8cqw; background: rgba(255,255,255,.9); }
+.lh-compass .tk b { font-family: var(--font-mono); font-weight: 500; font-size: 1.2cqw; color: var(--ash-white); margin-top: 0.4cqw; }
+
+/* completion prompt (replaces the static one when fire cleared) */
+.lh-done { position: absolute; z-index: 6; left: 50%; bottom: 18%; transform: translateX(-50%) translateY(0.6cqw);
+  opacity: 0; visibility: hidden; transition: opacity .4s ease, transform .4s ease; }
+.lh-done.show { opacity: 1; visibility: visible; transform: translateX(-50%); }
+
+/* a faint hint to spray */
+.lh-hint { position: absolute; z-index: 4; left: 50%; top: 50%; transform: translate(-50%, 7cqw);
+  font-family: var(--font-mono); font-size: 1.25cqw; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ash-white); background: color-mix(in srgb,var(--carbon-black) 60%, transparent); border: 1px solid rgba(255,255,255,.25);
+  padding: 0.5cqw 1cqw; border-radius: var(--r-pill); pointer-events: none; transition: opacity .3s; }
+.lh-screen.cleared .lh-hint { opacity: 0; }

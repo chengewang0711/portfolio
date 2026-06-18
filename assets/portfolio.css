@@ -1,0 +1,287 @@
+/* ============================================================================
+   PORTFOLIO SHELL — merges Firepulse (dark) + Oxy Loop (light) into one page.
+   Loaded LAST so it wins. Owns: scale, shared chrome, transition, cursor theme.
+   ========================================================================== */
+
+:root{
+  --pf-zoom: 1.26;
+  --pf-ink: #07080c;
+  --pf-fire: #F36A13;
+  --pf-oxy: #2BB7BC;
+  --pf-tt: #FF7417;
+  --pf-nav-h: 60px;
+  --pf-ease: cubic-bezier(.22,.61,.36,1);
+  --font-pf: "Saira", "M PLUS Rounded 1c", system-ui, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce){ html { scroll-behavior: auto; } }
+body{
+  margin: 0; background: var(--pf-ink); color: #fff;
+  font-family: var(--font-pf); overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ----------------------------------------------------------------------------
+   One coordinate space for the whole page: projects are NOT zoomed (zoom made
+   %/vw widths resolve against a mis-sized parent and broke column alignment).
+   The whole document is magnified once on <html> via font-size + a root zoom
+   so every column — masthead, projects, footer — shares the same measure.
+   Backgrounds become absolute so they don't bleed across stacked themes.
+   ---------------------------------------------------------------------------- */
+.proj{
+  position: relative; isolation: isolate;
+  width: 100%;
+}
+/* ----------------------------------------------------------------------------
+   UNIFIED CONTENT WIDTH — every section column aligns to one 1180px measure
+   (use % not vw so the scrollbar never causes overflow / size jitter)
+   ---------------------------------------------------------------------------- */
+:root{ --pf-maxw: 2200px; --pf-col: min(2200px, 92vw); --rail-w: 236px; }
+.pf-intro .inner,
+.pf-foot .inner,
+.proj-fire .wrap, .proj-fire .hero-inner, .proj-fire .cover-inner,
+.proj-oxy .wrap, .proj-oxy .cover-grid,
+.proj-tt .wrap, .proj-tt .tt-cover-grid, .proj-tt .scene-copy{
+  width: var(--pf-col) !important; margin-inline: auto !important; max-width: none !important;
+}
+.proj-oxy .wrap-narrow{ width: min(980px, 90vw) !important; margin-inline: auto !important; }
+/* reserve a left column for the always-on fixed project rail (rail hidden < 1200px) */
+@media (min-width: 1200px){
+  .pf-intro .inner, .pf-foot .inner,
+  .proj-fire .wrap, .proj-fire .hero-inner, .proj-fire .cover-inner,
+  .proj-oxy .wrap, .proj-oxy .cover-grid, .proj-oxy .wrap-narrow,
+  .proj-tt .wrap, .proj-tt .tt-cover-grid, .proj-tt .scene-copy,
+  .cv-inner{ padding-left: calc(var(--rail-w) + 26px) !important; }
+}
+/* contain each theme's fixed backgrounds to its own wrapper */
+.proj-fire .ember-field, .proj-fire .grid-overlay,
+.proj-oxy .atmos, .proj-oxy .grain{ position: absolute !important; }
+/* unified vertical rhythm across all three projects */
+.proj-fire .section, .proj-oxy .section, .proj-tt .section{ padding: clamp(72px, 10vh, 138px) 0 !important; }
+
+/* covers anchor the corner award seal; fill one screen */
+.proj-fire #fire-cover.cover, .proj-tt .tt-cover, .proj-oxy #oxy-cover.cover{ position: relative !important; }
+.proj-fire #fire-cover.cover, .proj-oxy #oxy-cover.cover{ min-height: 100vh !important; height: auto !important; }
+.proj-fire .hero{ min-height: auto !important; padding-top: 11vh; padding-bottom: 7vh; }
+/* hide each project's own chrome (replaced by shared shell) */
+.proj .scroll-rail, .proj .topbar, .proj .dotnav, .proj > .rail, .proj .foot{ display: none !important; }
+
+/* ----------------------------------------------------------------------------
+   SHARED TOP NAV
+   ---------------------------------------------------------------------------- */
+.pf-rail{ position: fixed; top: 0; left: 0; right: 0; height: 3px; z-index: 120; background: rgba(255,255,255,.06); }
+.pf-rail-fill{ height: 100%; width: 0%; background: linear-gradient(90deg, var(--pf-fire), var(--pf-oxy)); box-shadow: 0 0 14px rgba(243,106,19,.5); transition: background .6s ease; }
+body.theme-oxy .pf-rail-fill{ box-shadow: 0 0 14px rgba(43,183,188,.5); }
+body.theme-tt .pf-rail-fill{ box-shadow: 0 0 14px rgba(255,116,23,.5); }
+
+.pf-nav{
+  position: fixed; top: 0; left: 0; right: 0; height: var(--pf-nav-h); z-index: 115;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 clamp(18px, 4vw, 46px);
+  transition: background .4s ease, backdrop-filter .4s ease, border-color .4s ease;
+  border-bottom: 1px solid transparent;
+}
+.pf-nav.solid{ background: color-mix(in srgb, var(--pf-ink) 72%, transparent); backdrop-filter: blur(16px) saturate(1.2); border-color: rgba(255,255,255,.08); }
+body.theme-oxy .pf-nav.solid{ background: color-mix(in srgb, #f3fbfb 78%, transparent); border-color: rgba(0,31,29,.08); }
+body.theme-tt .pf-nav.solid{ background: color-mix(in srgb, #FAF7F3 80%, transparent); border-color: rgba(63,63,63,.08); }
+.pf-brand{ display: inline-flex; align-items: center; gap: 11px; text-decoration: none; color: #fff; font-weight: 800; font-size: 15px; letter-spacing: -0.01em; transition: color .4s; }
+body.theme-oxy .pf-brand{ color: #0b1f1d; }
+body.theme-tt .pf-brand{ color: #3F3F3F; }
+.pf-brand .bdot{ width: 9px; height: 9px; border-radius: 50%; background: var(--pf-fire); box-shadow: 0 0 10px var(--pf-fire); transition: background .4s, box-shadow .4s; }
+body.theme-oxy .pf-brand .bdot{ background: var(--pf-oxy); box-shadow: 0 0 10px var(--pf-oxy); }
+body.theme-tt .pf-brand .bdot{ background: var(--pf-tt); box-shadow: 0 0 10px var(--pf-tt); }
+.pf-brand b{ font-weight: 800; }
+.pf-brand .bsub{ font-weight: 500; opacity: .5; font-size: 12px; }
+
+.pf-tabs{ display: flex; align-items: center; gap: 4px; }
+.pf-tabs a{ position: relative; text-decoration: none; color: rgba(255,255,255,.62); font-weight: 700; font-size: 13px; letter-spacing: .01em; padding: 8px 15px; border-radius: 999px; transition: color .3s, background .3s; }
+.pf-tabs a .tnum{ font-variant-numeric: tabular-nums; opacity: .5; margin-right: 7px; font-size: 11px; }
+body.theme-oxy .pf-tabs a{ color: rgba(11,31,29,.55); }
+body.theme-tt .pf-tabs a{ color: rgba(63,63,63,.6); }
+.pf-tabs a:hover{ color: #fff; background: rgba(255,255,255,.08); }
+body.theme-oxy .pf-tabs a:hover{ color: #062b28; background: rgba(43,183,188,.12); }
+body.theme-tt .pf-tabs a:hover{ color: #4a2406; background: rgba(255,116,23,.12); }
+.pf-tabs a.active{ color: #fff; }
+body.theme-oxy .pf-tabs a.active{ color: #06302c; }
+body.theme-tt .pf-tabs a.active{ color: #4a2406; }
+.pf-tabs a.active.t-fire{ background: color-mix(in srgb, var(--pf-fire) 20%, transparent); color: #ffd9b8; }
+.pf-tabs a.active.t-oxy{ background: color-mix(in srgb, var(--pf-oxy) 18%, transparent); color: #063b38; }
+.pf-tabs a.active.t-tt{ background: color-mix(in srgb, var(--pf-tt) 18%, transparent); color: #7a3c0a; }
+@media (max-width: 620px){ .pf-tabs a .tnum{ display:none; } .pf-tabs a{ padding: 8px 11px; font-size: 12px; } .pf-brand .bsub{ display:none; } }
+
+/* ----------------------------------------------------------------------------
+   PORTFOLIO MASTHEAD
+   ---------------------------------------------------------------------------- */
+.pf-intro{ position: relative; min-height: 100vh; display: grid; align-items: center; overflow: hidden; padding: calc(var(--pf-nav-h) + 4vh) 0 8vh; }
+.pf-intro .bg{ position: absolute; inset: 0; z-index: 0;
+  background:
+    radial-gradient(60% 50% at 80% 8%, color-mix(in srgb, var(--pf-fire) 22%, transparent), transparent 60%),
+    radial-gradient(55% 50% at 12% 100%, color-mix(in srgb, var(--pf-oxy) 22%, transparent), transparent 62%),
+    var(--pf-ink); }
+.pf-intro .grid{ position: absolute; inset: 0; z-index: 0; opacity: .5;
+  background-image: linear-gradient(rgba(255,255,255,.04) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.04) 1px, transparent 1px);
+  background-size: 58px 58px; mask-image: radial-gradient(120% 80% at 50% 30%, #000 30%, transparent 88%); }
+.pf-intro .inner{ position: relative; z-index: 2; width: min(2000px, 92vw); margin-inline: auto; }
+.pf-eyebrow{ display: inline-flex; align-items: center; gap: 11px; font-weight: 700; font-size: 12px; letter-spacing: .26em; text-transform: uppercase; color: rgba(255,255,255,.7); }
+.pf-eyebrow::before{ content:""; width: 28px; height: 1px; background: linear-gradient(90deg, var(--pf-fire), var(--pf-oxy)); }
+.pf-title{ font-weight: 300; font-size: clamp(46px, 8vw, 104px); line-height: 1.0; letter-spacing: -0.02em; margin: 22px 0 0; text-wrap: balance; color: #fff; }
+.pf-title.pf-title-cn{ font-family: 'PingFang SC','PingFang TC','Hiragino Sans GB','Microsoft YaHei',system-ui,sans-serif;
+  font-weight: 500; font-size: clamp(22px, 2.4vw, 34px); line-height: 1.2; letter-spacing: .04em; color: #fff; margin: 14px 0 0; }
+.pf-intro .sub{ margin: 24px 0 0; max-width: 60ch; font-size: clamp(15px, 1.6vw, 20px); line-height: 1.6; color: rgba(255,255,255,.66); font-weight: 500; }
+
+.pf-cards{ display: grid; grid-template-columns: 1fr 1fr; gap: 22px; margin-top: clamp(36px, 6vh, 70px); }
+@media (max-width: 820px){ .pf-cards{ grid-template-columns: 1fr; } }
+.pf-card{ position: relative; display: block; text-decoration: none; border-radius: 24px; overflow: hidden; padding: 30px 30px 26px; min-height: 280px;
+  border: 1.5px solid rgba(255,255,255,.12); transform-style: preserve-3d; transition: transform .5s var(--pf-ease), border-color .4s, box-shadow .5s; isolation: isolate; }
+.pf-card .cbg{ position: absolute; inset: 0; z-index: -2; transition: transform .6s var(--pf-ease); }
+.pf-card .csheen{ position: absolute; inset: 0; z-index: -1; opacity: 0; transition: opacity .5s; background: radial-gradient(40% 60% at var(--mx,50%) var(--my,0%), rgba(255,255,255,.16), transparent 60%); }
+.pf-card:hover .csheen{ opacity: 1; }
+.pf-card.fire{ background: #140a06; }
+.pf-card.fire .cbg{ background: radial-gradient(90% 80% at 80% 0%, color-mix(in srgb, var(--pf-fire) 34%, transparent), transparent 60%), linear-gradient(180deg, #1c0d05, #0c0706); }
+.pf-card.oxy{ background: #eaf7f7; }
+.pf-card.tt{ background: #FAF7F3; }
+.pf-card.tt .cbg{ background: radial-gradient(90% 80% at 80% 0%, color-mix(in srgb, var(--pf-tt) 26%, transparent), transparent 62%), linear-gradient(180deg, #fdfaf6, #f4ece2); }
+.pf-card.oxy .cbg{ background: radial-gradient(90% 80% at 80% 0%, color-mix(in srgb, var(--pf-oxy) 30%, transparent), transparent 62%), linear-gradient(180deg, #f4fcfc, #dcefef); }
+.pf-card:hover{ transform: translateY(-6px); box-shadow: 0 30px 70px rgba(0,0,0,.45); }
+.pf-card.fire:hover{ border-color: color-mix(in srgb, var(--pf-fire) 60%, transparent); }
+.pf-card.oxy:hover{ border-color: color-mix(in srgb, var(--pf-oxy) 65%, transparent); box-shadow: 0 30px 70px rgba(0,31,29,.22); }
+.pf-card.tt:hover{ border-color: color-mix(in srgb, var(--pf-tt) 60%, transparent); box-shadow: 0 30px 70px rgba(74,36,6,.22); }
+.pf-card .cidx{ font-weight: 800; font-size: 13px; letter-spacing: .2em; opacity: .6; }
+.pf-card .cname{ font-weight: 800; font-size: clamp(30px, 4vw, 46px); line-height: 1; margin: 14px 0 0; letter-spacing: -0.01em; }
+.pf-card .cdesc{ margin: 14px 0 0; font-size: 14.5px; line-height: 1.55; max-width: 40ch; }
+.pf-card .ctags{ display: flex; gap: 8px; flex-wrap: wrap; margin-top: 20px; }
+.pf-card .ctag{ font-size: 11px; font-weight: 700; letter-spacing: .04em; padding: 6px 12px; border-radius: 999px; border: 1px solid currentColor; }
+.pf-card .cgo{ position: absolute; right: 26px; bottom: 24px; display: inline-flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px; }
+.pf-card .cgo .arr{ display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid currentColor; transition: transform .35s var(--pf-ease); }
+.pf-card:hover .cgo .arr{ transform: translateX(4px); }
+.pf-card.fire{ color: #ffceac; }
+.pf-card.fire .cname{ color: #fff; }
+.pf-card.fire .cdesc{ color: rgba(255,255,255,.6); }
+.pf-card.oxy{ color: #0f6b6c; }
+.pf-card.oxy .cname{ color: #06302c; }
+.pf-card.oxy .cdesc{ color: #3a5a58; }
+.pf-card.tt{ color: #b85510; }
+.pf-card.tt .cname{ color: #3F3F3F; }
+.pf-card.tt .cdesc{ color: #7d6a5a; }
+
+.pf-introcue{ position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); z-index: 3; display: flex; flex-direction: column; align-items: center; gap: 8px; font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.pf-introcue .ln{ width: 1px; height: 34px; background: linear-gradient(#fff, transparent); }
+.motion .pf-introcue .ln{ animation: pfcue 1.8s ease-in-out infinite; transform-origin: top; }
+@keyframes pfcue{ 0%,100%{ transform: scaleY(.4); opacity:.4 } 50%{ transform: scaleY(1); opacity:1 } }
+
+/* ----------------------------------------------------------------------------
+   THEME TRANSITION between the two case studies
+   ---------------------------------------------------------------------------- */
+.pf-transition{ position: relative; height: 42vh; display: grid; place-items: center; overflow: hidden;
+  background: #060607; }
+.pf-transition .tgrid{ position: absolute; inset: 0; opacity: .55;
+  background-image: radial-gradient(rgba(255,255,255,.12) 1px, transparent 1.4px); background-size: 34px 34px;
+  mask-image: radial-gradient(72% 64% at 50% 46%, #000 8%, transparent 76%); }
+.pf-transition .tinner{ position: relative; text-align: center; z-index: 2; }
+.pf-transition .tnum{ font-weight: 500; font-size: clamp(56px, 10vw, 132px); line-height: 1; letter-spacing: .02em;
+  font-family: 'Helvetica Neue', Arial, 'Nunito', sans-serif;
+  color: transparent; -webkit-text-stroke: 1.2px rgba(255,255,255,.5); }
+.pf-transition .tlabel{ margin-top: 18px; font-weight: 600; letter-spacing: .28em; text-transform: uppercase; font-size: 11.5px; color: rgba(255,255,255,.5); }
+.pf-transition .tsub{ margin-top: 13px; font-size: clamp(17px, 2vw, 27px); font-weight: 500; color: rgba(255,255,255,.84); letter-spacing: 0; }
+.pf-transition .torbs{ position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.pf-transition .torbs span{ position: absolute; border-radius: 50%; filter: none; }
+
+/* ---- Transition → TouchTune: interactive musical-note field ---- */
+.pf-transition.t-music{ background:
+  radial-gradient(72% 82% at 50% 52%, color-mix(in srgb, var(--pf-tt) 15%, transparent), transparent 70%),
+  #070605; }
+.pf-transition.t-music .tgrid{ opacity: .55;
+  background-image: repeating-linear-gradient(0deg, rgba(255,255,255,.14) 0 1px, transparent 1px 27px);
+  background-size: auto;
+  mask-image: radial-gradient(82% 72% at 50% 50%, #000 28%, transparent 84%); }
+.pf-transition.t-music .tnote{ position: absolute; line-height: 1; border-radius: 0;
+  user-select: none; pointer-events: none; will-change: transform, opacity;
+  font-family: 'Helvetica Neue', Arial, 'Nunito', sans-serif;
+  text-shadow: 0 2px 16px color-mix(in srgb, var(--pf-tt) 45%, transparent); }
+.pf-transition.t-music .tnum{ -webkit-text-stroke-color: color-mix(in srgb, var(--pf-tt) 65%, #fff); }
+.pf-transition.t-music .torbs{ display: none; }
+
+/* ---- Transition → Oxy: light, seamless paper → mist (no dark band) ---- */
+.pf-transition.t2{ background:
+  linear-gradient(180deg, #FAF7F3 0%, #F1F7F5 48%, #EAF7F7 100%); }
+.pf-transition.t2 .tgrid{ opacity: .5;
+  background-image: radial-gradient(rgba(23,50,48,.10) 1px, transparent 1.4px); background-size: 34px 34px;
+  mask-image: radial-gradient(72% 64% at 50% 46%, #000 8%, transparent 76%); }
+.pf-transition.t2 .tnum{ -webkit-text-stroke-color: color-mix(in srgb, var(--pf-oxy) 58%, #173230); }
+.pf-transition.t2 .tlabel{ color: rgba(23,50,48,.52); }
+.pf-transition.t2 .tsub{ color: rgba(23,50,48,.82); }
+.pf-transition.t2 .torbs span{ background: color-mix(in srgb, var(--pf-oxy) 58%, #fff) !important; }
+
+/* ----------------------------------------------------------------------------
+   SHARED FOOTER
+   ---------------------------------------------------------------------------- */
+.pf-foot{ position: relative; z-index: 2; background: var(--pf-ink); color: #fff; padding: clamp(56px, 9vh, 110px) 0 64px; border-top: 1px solid rgba(255,255,255,.08); }
+.pf-foot .inner{ width: min(1900px, 92vw); margin-inline: auto; }
+.pf-foot .top{ display: flex; justify-content: space-between; align-items: flex-end; gap: 30px; flex-wrap: wrap; }
+.pf-foot .big{ font-weight: 800; font-size: clamp(34px, 6vw, 74px); line-height: .98; letter-spacing: -0.02em;
+  background: linear-gradient(100deg, #fff, #ffb888 50%, #7fe6e8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pf-foot .big span{ display: block; font-size: 14px; font-weight: 500; color: rgba(255,255,255,.5); letter-spacing: 0; margin-top: 12px; -webkit-text-fill-color: rgba(255,255,255,.5); }
+.pf-foot .links{ display: flex; gap: 12px; flex-wrap: wrap; }
+.pf-foot .links a{ display: inline-flex; align-items: center; gap: 9px; text-decoration: none; color: #fff; font-weight: 700; font-size: 13px; padding: 11px 18px; border-radius: 999px; border: 1.5px solid rgba(255,255,255,.16); transition: border-color .3s, transform .3s, background .3s; }
+.pf-foot .links a.fire:hover{ border-color: var(--pf-fire); background: color-mix(in srgb, var(--pf-fire) 14%, transparent); transform: translateY(-2px); }
+.pf-foot .links a.oxy:hover{ border-color: var(--pf-oxy); background: color-mix(in srgb, var(--pf-oxy) 14%, transparent); transform: translateY(-2px); }
+.pf-foot .links a.tt:hover{ border-color: var(--pf-tt); background: color-mix(in srgb, var(--pf-tt) 14%, transparent); transform: translateY(-2px); }
+.pf-foot .credits{ margin-top: 30px; font-size: 12px; color: rgba(255,255,255,.4); letter-spacing: .04em; }
+
+/* ----------------------------------------------------------------------------
+   THEMED CUSTOM CURSOR — self-contained colors (the project tokens are scoped
+   to their wrappers, so the cursor must NEVER depend on them: it lives on body).
+   ---------------------------------------------------------------------------- */
+:root{ --pf-cursor: var(--pf-fire); }
+body.theme-oxy{ --pf-cursor: var(--pf-oxy); }
+body.theme-tt{ --pf-cursor: var(--pf-tt); }
+.cursor-dot{
+  width: 8px !important; height: 8px !important;
+  background: var(--pf-cursor) !important;
+  box-shadow: 0 0 0 1.5px rgba(255,255,255,.9), 0 0 12px var(--pf-cursor) !important;
+  transition: background .35s ease;
+}
+body.theme-oxy .cursor-dot, body.theme-tt .cursor-dot{ box-shadow: 0 0 0 1.5px rgba(7,8,12,.5), 0 0 12px var(--pf-cursor) !important; }
+.cursor-ring{ border-color: color-mix(in srgb, var(--pf-cursor) 70%, transparent) !important; transition-property: width, height, background, border-color, opacity; }
+body.has-cursor.is-interactive .cursor-ring{ border-color: var(--pf-cursor) !important; background: color-mix(in srgb, var(--pf-cursor) 14%, transparent) !important; }
+body.has-cursor.is-label .cursor-ring{ background: var(--pf-cursor) !important; border-color: var(--pf-cursor) !important; }
+.cursor-ring .cur-label{ color: #0b0b0d !important; }
+
+/* reveal safety: never leave merged content hidden */
+.proj .reveal{ will-change: opacity, transform; }
+
+
+/* ---------------- Red Dot award badges ---------------- */
+.pf-card .reddot{ position: absolute; top: 18px; right: 18px; height: 64px; width: auto;
+  z-index: 2; opacity: 1; transition: none; box-shadow: none; }
+.pf-card:hover .reddot{ transform: none; }
+
+/* cover corner seal — anchored to the top-right of the content column, unobtrusive */
+.award-badge{
+  position: absolute; z-index: 6; margin: 0;
+  top: calc(var(--pf-nav-h) + 22px);
+  right: max(4%, calc((100% - var(--pf-maxw)) / 2));
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 8px 14px 8px 10px; border-radius: 999px;
+  background: color-mix(in srgb, var(--pf-ink) 6%, transparent);
+  border: 1px solid color-mix(in srgb, currentColor 16%, transparent);
+  backdrop-filter: blur(6px); opacity: .9; transition: opacity .3s var(--pf-ease), transform .3s var(--pf-ease); }
+.award-badge:hover{ opacity: 1; transform: translateY(-1px); }
+.award-badge img{ height: 42px; width: auto; display: block; border-radius: 7px; }
+.award-badge .ab-line{ display: none; }
+.award-badge .ab-txt{ font-weight: 700; font-size: 11px; letter-spacing: .1em; text-transform: uppercase; opacity: .78; white-space: nowrap; }
+.award-badge.dark{ color: #F2EEE8; background: rgba(255,255,255,.07); border-color: rgba(255,255,255,.16); }
+.award-badge.dark img{ box-shadow: 0 4px 12px rgba(0,0,0,.35); }
+.award-badge.light{ color: #3F3F3F; background: rgba(63,63,63,.05); border-color: rgba(63,63,63,.14); }
+@media (max-width: 680px){
+  .award-badge .ab-txt{ display: none; }
+  .award-badge{ padding: 7px; right: 5%; top: calc(var(--pf-nav-h) + 12px); }
+}
+
+/* ---------------- Masthead title word reveal ---------------- */
+body.motion .pf-title .w{ display: inline-block; opacity: 0; transform: translateY(.6em) rotate(2deg); filter: blur(6px);
+  animation: pf-word .9s cubic-bezier(.22,.61,.36,1) forwards; animation-delay: calc(var(--wi) * 90ms + 150ms); }
+@keyframes pf-word{ to{ opacity: 1; transform: none; filter: blur(0); } }
+@media (prefers-reduced-motion: reduce){ body.motion .pf-title .w{ animation: none; opacity: 1; transform: none; filter: none; } }

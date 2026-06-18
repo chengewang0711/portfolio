@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en" data-hero="split" data-showcase="frame">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Firepulse — MR Fireground Training</title>
+<link rel="stylesheet" href="assets/firepulse-tokens.css" />
+<link rel="stylesheet" href="assets/site.css" />
+<link rel="stylesheet" href="assets/premium.css" />
+<link rel="stylesheet" href="assets/screens.css" />
+<link rel="stylesheet" href="assets/livehud.css" />
+<style>
+  /* ECG waveform scroll */
+  .motion .ecg-scroll { animation: ecgmove 2.2s linear infinite; }
+  @keyframes ecgmove { to { transform: translateX(-100px); } }
+  /* suit layers row */
+  .layers-row { display: grid; grid-template-columns: 168px 1fr; gap: 18px; align-items: center; margin-top: 18px; }
+  .layers-row .lfig { border: 1px solid var(--panel-line); border-radius: var(--r-sm); overflow: hidden; background: radial-gradient(120% 120% at 50% 20%, #241712, #14100d); padding: 10px; }
+  .layers-row .lfig img { width: 100%; display: block; filter: drop-shadow(0 10px 18px rgba(0,0,0,.55)); }
+  .layers-row .layer-list { margin-top: 0; }
+  @media (max-width: 540px){ .layers-row { grid-template-columns: 1fr; } }
+  /* framed report shot */
+  .report-shot { margin-top: 26px; border: 1px solid var(--border-signal); border-radius: var(--r-md); overflow: hidden; box-shadow: var(--shadow-panel); position: relative; }
+  .report-shot img { width: 100%; display: block; }
+  .report-shot .rcap { position: absolute; top: 12px; left: 14px; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ash-white); background: color-mix(in srgb,var(--carbon-black) 55%, transparent); padding: 5px 10px; border-radius: var(--r-xs); border: 1px solid var(--border-signal); backdrop-filter: blur(3px); }
+  .cap-row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 12px; }
+  @media (max-width: 680px){ .cap-row { grid-template-columns: 1fr; } }
+  .cap-row .c { font-size: var(--fs-small); color: var(--fg-muted); }
+  .cap-row .c b { color: var(--ash-white); display:block; font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.16em; text-transform: uppercase; margin-bottom: 5px; color: var(--fire-orange); }
+  /* full-width finished composites (labels baked in, transparent PNG) */
+  .composite { position: relative; }
+  .composite img { width: 100%; display: block; filter: drop-shadow(0 24px 50px rgba(0,0,0,.55)); }
+  /* pain-point captions under the composite */
+  .pain-caps { display: grid; grid-template-columns: repeat(3,1fr); gap: 22px; margin-top: 22px; }
+  @media (max-width: 820px){ .pain-caps { grid-template-columns: 1fr; gap: 16px; } }
+  .pain-caps .c .idx { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fire-orange); display:block; margin-bottom: 6px; }
+  .pain-caps .c p { margin: 0; color: var(--fg-muted); font-size: var(--fs-small); }
+  /* MR headset detail (through-the-visor) */
+  .headset-detail { margin: 22px 0 0; }
+  .headset-detail img { width: 100%; display: block; border: 1px solid var(--panel-line); border-radius: var(--r-md); background: radial-gradient(120% 120% at 30% 30%, #1d130d, #100c09); }
+  .headset-detail figcaption { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); margin-top: 10px; }
+  /* concept system banner */
+  .concept-hero { position: relative; border: 1px solid var(--panel-line); border-radius: var(--r-lg); overflow: hidden; margin-bottom: clamp(28px,5vh,56px); background: #1c1c1e; }
+  .concept-hero img { width: 100%; display: block; }
+  .concept-hero::after { content:""; position:absolute; inset:0; box-shadow: inset 0 0 120px 24px rgba(9,7,6,.6); pointer-events:none; }
+  .concept-hero .ch-cap { position: absolute; left: 22px; bottom: 18px; z-index: 2; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--smoke-gray); }
+  /* power-pack detail thumbs */
+  .detail-thumbs { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-top: 22px; }
+  .detail-thumbs figure { margin: 0; }
+  .detail-thumbs .dt-img { border: 1px solid var(--panel-line); border-radius: var(--r-sm); background: radial-gradient(120% 120% at 50% 25%, #241712, #14100d); display: grid; place-items: center; padding: 14px; aspect-ratio: 4/3; }
+  .detail-thumbs .dt-img img { max-width: 100%; max-height: 100%; width: auto; height: auto; filter: drop-shadow(0 14px 22px rgba(0,0,0,.6)); }
+  .detail-thumbs figcaption { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--fg-muted); margin-top: 9px; }
+</style>
+</head>
+<body>
+<div class="ember-field"></div>
+<div class="grid-overlay"></div>
+
+<div class="scroll-rail"><div class="scroll-bar"></div></div>
+
+<header class="topbar">
+  <div class="mark">Fire<b>pulse</b></div>
+  <div style="display:flex;align-items:center;gap:18px">
+    <div class="meta">MR Fireground Training System</div>
+    <a href="oxy-loop.html" style="font-family:var(--font-mono);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:var(--heat-amber);text-decoration:none;border:1px solid var(--border-signal);padding:7px 13px;border-radius:var(--r-pill);white-space:nowrap">Oxy Loop →</a>
+  </div>
+</header>
+
+<nav class="dotnav" aria-label="Section navigation">
+  <a href="#cover" class="active"><span class="lbl">Cover</span><span class="dot"></span></a>
+  <a href="#top"><span class="lbl">Intro</span><span class="dot"></span></a>
+  <a href="#problem"><span class="lbl">Background</span><span class="dot"></span></a>
+  <a href="#pain"><span class="lbl">Pain Point</span><span class="dot"></span></a>
+  <a href="#ideation"><span class="lbl">Ideation</span><span class="dot"></span></a>
+  <a href="#concept"><span class="lbl">Concept</span><span class="dot"></span></a>
+  <a href="#usage"><span class="lbl">Usage</span><span class="dot"></span></a>
+  <a href="#interface"><span class="lbl">Interface</span><span class="dot"></span></a>
+  <a href="#assessment"><span class="lbl">Assessment</span><span class="dot"></span></a>
+</nav>
+
+<main>
+
+<!-- ============ COVER ============ -->
+<section id="cover" class="cover" data-screen-label="Cover">
+  <canvas id="cover-gl" aria-hidden="true"></canvas>
+  <div class="cover-veil"></div>
+  <div class="cover-grain"></div>
+  <div class="cover-inner">
+    <div class="cover-glass">
+      <div class="kicker c-kicker">Mixed-Reality Fireground Training</div>
+      <h1 class="wordmark cover-title">Fire<b>pulse</b></h1>
+      <p class="cover-sub">Real heat. Real weight. Real pressure — the fireground inside any building, without the danger.</p>
+      <div class="cover-meta">
+        <span>Realistic</span><span>Tactical</span><span>Measured</span>
+      </div>
+    </div>
+    <a href="#top" class="cover-cue" data-magnetic="0.3" data-cursor-label="Enter">Enter the system <span class="arr">↓</span></a>
+  </div>
+  <div class="cover-fade"></div>
+</section>
+
+<!-- ============ HERO ============ -->
+<section id="top" class="hero" data-screen-label="Hero">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <div class="kicker eyebrow reveal">Firepulse · MR Training System</div>
+      <h1 class="wordmark hero-name reveal d1">Fire<b>pulse</b></h1>
+      <div class="hero-tag reveal d2">MR Fireground Training with Realistic Physical Load</div>
+      <p class="hero-desc reveal d3">Firepulse combines mixed reality with real firefighting gear to deliver a safe, immersive training experience. Training inside actual buildings, firefighters face the authentic physical and mental stress of fireground operations — through thermal feedback, weight simulation and motion tracking.</p>
+      <div class="hero-stats reveal d4">
+        <div class="stat"><div class="v">0</div><div class="k">Live-fire incidents</div></div>
+        <div class="stat"><div class="v">3<span>·</span></div><div class="k">Physical feedback channels</div></div>
+        <div class="stat"><div class="v">100<span>%</span></div><div class="k">Repeatable &amp; measurable</div></div>
+      </div>
+    </div>
+    <div class="hero-figure reveal d2">
+      <img src="assets/img/hero-figure.jpg" alt="Firefighter in Firepulse training gear holding a hose" />
+    </div>
+  </div>
+  <a href="#problem" class="scroll-cue" data-magnetic="0.35"><span>Scroll</span><span class="line"></span></a>
+</section>
+
+<!-- ============ 01 BACKGROUND ============ -->
+<section id="problem" class="section" data-screen-label="Background">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">01</div>
+      <div class="htext">
+        <span class="kicker">The Problem</span>
+        <span class="section-title">Background</span>
+        <p class="lead">Firefighter training is essential for high-risk response — yet real-environment, live-fire training is costly, hard to scale, and lacks safe, repeatable, effective methodology.</p>
+      </div>
+    </div>
+    <div class="composite reveal d1">
+      <img src="assets/img/bg-compare.png" alt="Real environments versus VR-only training" />
+    </div>
+    <div class="cap-row reveal d2">
+      <div class="c"><b>Real environments</b>Authentic stress, but costly, dangerous and impossible to repeat at scale.</div>
+      <div class="c"><b>VR-only</b>Safe and repeatable, but no heat, no weight, no physical pressure.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 02 PAIN POINT ============ -->
+<section id="pain" class="section" data-screen-label="Pain Point">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">02</div>
+      <div class="htext">
+        <span class="kicker">Why It Matters</span>
+        <span class="section-title">Pain Point</span>
+        <p class="lead">VR-only systems can't simulate the sensory load of a real fire — temperature, weight, physical pressure. The result is inadequate training that risks injury and resists accurate assessment.</p>
+      </div>
+    </div>
+    <div class="composite reveal d1">
+      <img src="assets/img/painpoint.png" alt="Three pain points: safety risks, difficult to evaluate results, lack of realism in VR systems" />
+    </div>
+    <div class="pain-caps reveal d2">
+      <div class="c"><span class="idx">P-01 · Safety risks</span><p>Live-fire drills expose trainees to burns, smoke inhalation and collapse hazards.</p></div>
+      <div class="c"><span class="idx">P-02 · Difficult to evaluate</span><p>Outcomes are judged by eye on paper — subjective, inconsistent and hard to compare.</p></div>
+      <div class="c"><span class="idx">P-03 · Lack of realism</span><p>Pure VR misses heat, load and pressure — the body never learns the real stress.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 03 IDEATION ============ -->
+<section id="ideation" class="section" data-screen-label="Ideation">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">03</div>
+      <div class="htext">
+        <span class="kicker">The Approach</span>
+        <span class="section-title">Ideation</span>
+        <p class="lead">Leveraging physical feedback and data-driven assessment, the system delivers immersive training in real buildings without live fire. Rather than replicating the fire itself, it simulates the physical and psychological stress the fire provokes.</p>
+      </div>
+    </div>
+    <div class="ideation-band reveal d1">
+      <img src="assets/img/ideation.jpg" alt="Concept sketches: helmet, suit, nozzle and gear exploration" />
+      <div class="ideation-cap">Concept exploration · headset · suit · nozzle</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 04 CONCEPT ============ -->
+<section id="concept" class="section" data-screen-label="Concept">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">04</div>
+      <div class="htext">
+        <span class="kicker">The System</span>
+        <span class="section-title">Concept</span>
+        <p class="lead">A head-to-hand kit: a mixed-reality headset, a sensor-laden training suit with power pack, and a real water hose — every piece tuned to recreate the load of the fireground.</p>
+      </div>
+    </div>
+
+    <div class="concept-hero reveal d1">
+      <img src="assets/img/concept-system.jpg" alt="The full Firepulse kit — headset, training suit and smart nozzle" />
+      <div class="ch-cap">The complete kit · headset · suit · nozzle</div>
+    </div>
+
+    <div class="concept">
+      <div class="feature headset-feature reveal d1">
+        <div class="media" data-tilt="6"><img src="assets/img/concept-helmet.png" alt="MR training helmet with visor" /></div>
+        <div class="ftext">
+          <span class="kicker">01 — Headset</span>
+          <h3>MR Headset</h3>
+          <p>A mixed-reality overlay for immersive, scenario-accurate visual feedback. The visor renders fire, smoke and the tactical HUD directly onto the real space the trainee is standing in.</p>
+          <div class="spec-chips"><span class="chip">Mixed reality</span><span class="chip">Scenario overlay</span><span class="chip">Tactical HUD</span></div>
+          <figure class="headset-detail">
+            <img src="assets/img/headset-detail.png" alt="Through the visor: Teaching Model overlay rendered onto the live fire scene" style="opacity: 0.8" />
+            <figcaption>            Through the visor — Teaching Model + READY overlay</figcaption>
+          </figure>
+        </div>
+      </div>
+
+      <div class="feature rev reveal d1">
+        <div class="media" data-tilt="6"><img src="assets/img/concept-suit.png" alt="Training suit" /></div>
+        <div class="ftext">
+          <span class="kicker">02 — Wearable</span>
+          <h3>Training Suit</h3>
+          <p>The suit provides thermal feedback and tracks movement. A multi-layer build delivers controlled heat where the scenario calls for it, without burning.</p>
+          <div class="layers-row">
+            <div class="lfig"><img src="assets/img/concept-layers.png" alt="Exploded view of suit layers" /></div>
+            <ul class="layer-list">
+              <li><span class="n">01</span><span><b>PU wear-resistant layer</b></span></li>
+              <li><span class="n">02</span><span><b>Insulation layer</b></span></li>
+              <li><span class="n">03</span><span><b>Heating wire</b></span></li>
+              <li><span class="n">04</span><span><b>Heat-spreader layer</b></span></li>
+              <li><span class="n">05</span><span><b>Comfort layer</b></span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature reveal d1">
+        <div class="media" data-tilt="6"><img src="assets/img/concept-powerpack.png" alt="Power pack backpack" /></div>
+        <div class="ftext">
+          <span class="kicker">03 — Power Pack</span>
+          <h3>Power Pack</h3>
+          <p>The backpack unit supplies power to the suit and headset — and replicates the weight of a real breathing apparatus, so the trainee's body carries the same load as the fireground.</p>
+          <div class="spec-chips"><span class="chip">Charging port</span><span class="chip">Detachable battery</span><span class="chip">SCBA weight sim</span></div>
+          <div class="detail-thumbs">
+            <figure><div class="dt-img"><img src="assets/img/pack-detach.png" alt="Detachable battery module" style="object-fit: scale-down" /></div><figcaption>Detachable battery</figcaption></figure>
+            <figure><div class="dt-img"><img src="assets/img/pack-dial.png" alt="Quick-release dock and power dial" style="height: 288px; width: 490px; object-fit: contain" /></div><figcaption>DOCK &amp;DIAL POWER </figcaption></figure>
+          </div>
+        </div>
+      </div>
+
+      <div class="feature rev reveal d1">
+        <div class="media" data-tilt="6"><img src="assets/img/concept-hose.png" alt="Water hose and nozzle" /></div>
+        <div class="ftext">
+          <span class="kicker">04 — Tool</span>
+          <h3>Water Hose</h3>
+          <p>A real water hose retains authentic pressure and handling, while a smart module tracks nozzle direction and usage — feeding the system's accuracy and efficiency scoring.</p>
+          <div class="spec-chips"><span class="chip">Authentic pressure</span><span class="chip">Smart nozzle tracking</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 05 USAGE ============ -->
+<section id="usage" class="section" data-screen-label="Usage">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">05</div>
+      <div class="htext">
+        <span class="kicker">How It Works</span>
+        <span class="section-title">Usage</span>
+        <p class="lead">Four stages take a trainee from briefing to after-action report — fully repeatable, fully measured.</p>
+      </div>
+    </div>
+
+    <div class="steps timeline">
+      <div class="step reveal" data-anim="rise">
+        <span class="step-node"></span>
+        <div class="step-copy">
+          <div class="step-no">01</div>
+          <h3>Don the gear &amp; sync to missions</h3>
+          <p>Firefighters put on the integrated MR system while instructors sync mission-specific tasks to each trainee. After selecting the teaching mode, trainees preview the fire location and operation map before entry.</p>
+        </div>
+        <div class="step-media">
+          <div class="frame16"><img src="assets/img/ui-teaching.jpg" alt="Teaching Model briefing screen" /></div>
+        </div>
+      </div>
+
+      <div class="step rev reveal" data-anim="clip">
+        <span class="step-node"></span>
+        <div class="step-copy">
+          <div class="step-no">02</div>
+          <h3>Dynamic scene overlay</h3>
+          <p>On entering the training area, the system overlays a dynamic fire scenario onto the physical space — generated from the building's structural blueprint. Drag the divider to see the same room transform.</p>
+        </div>
+        <div class="step-media">
+          <div class="ba">
+            <img src="assets/img/ba-before.jpg" alt="Room before overlay" />
+            <div class="after-wrap"><img src="assets/img/ba-after.jpg" alt="Room with fire overlay" /></div>
+            <div class="ba-label lbl-before">Before</div>
+            <div class="ba-label lbl-after">After</div>
+            <div class="handle"></div>
+            <div class="knob" role="slider" aria-label="Reveal fire overlay" aria-valuenow="50"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step reveal" data-anim="flip">
+        <span class="step-node"></span>
+        <div class="step-copy">
+          <div class="step-no">03</div>
+          <h3>Live operational drills</h3>
+          <p>Trainees perform drills with haptic feedback in realistic firefighting operations. The HUD tracks vitals, heading and trajectory, and live task progress — the operable system is rebuilt below.</p>
+        </div>
+        <div class="step-media">
+          <div class="frame16"><img src="assets/img/ui-hud.jpg" alt="Live operational HUD" /></div>
+        </div>
+      </div>
+
+      <div class="step rev reveal" data-anim="slide">
+        <span class="step-node"></span>
+        <div class="step-copy">
+          <div class="step-no">04</div>
+          <h3>Mission complete &amp; assessed</h3>
+          <p>When the primary fire source is extinguished, the drill resolves to <em>Mission Success</em> and the system finalizes logging — handing off to the data-driven after-action report.</p>
+        </div>
+        <div class="step-media">
+          <div class="frame16"><img src="assets/img/ui-success.jpg" alt="Mission success screen" /></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 06 INTERFACE ============ -->
+<section id="interface" class="section" data-screen-label="Interface">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">06</div>
+      <div class="htext">
+        <span class="kicker">The Interface</span>
+        <span class="section-title">In-headset UI</span>
+        <p class="lead">The real designed screens, made interactive — step through the full operator flow by clicking the highlighted controls, exactly as a trainee sees it in the visor.</p>
+      </div>
+    </div>
+
+    <div class="proto reveal d1">
+      <div class="proto-hint">
+        <span>Interactive prototype — click the highlighted controls to run the flow</span>
+        <span class="ph-live">Live · in-headset UI</span>
+      </div>
+
+      <div class="proto-device">
+        <div class="proto-chrome">
+          <div class="pc-l"><span class="pc-dot"></span><span class="pc-name">Fire<b>pulse</b> OS</span></div>
+          <div class="pc-r"><span class="pc-meta">MR Visor · 1920×1080</span></div>
+        </div>
+
+        <div class="proto-screen-wrap" id="ui-proto">
+          <!-- 01 TEACHING -->
+          <div class="proto-screen active" data-screen="teaching">
+            <img src="assets/img/ui-teaching.jpg" alt="Teaching Model — fire-scene map and heat-affected structures" />
+            <button class="hotspot" style="left:60%;top:10.5%;width:7%;height:10%" data-go="ready" aria-label="Confirm briefing"><span class="hs-ring"></span><span class="hs-tip">Confirm &amp; stand by</span></button>
+            <button class="proto-prompt center" data-go="ready">Confirm briefing <b>→</b></button>
+          </div>
+          <!-- 02 READY -->
+          <div class="proto-screen" data-screen="ready">
+            <img src="assets/img/ui-ready.jpg" alt="Ready to deploy" />
+            <button class="hotspot" style="left:35%;top:63.5%;width:30%;height:12%" data-go="live" aria-label="Ready — deploy"><span class="hs-ring"></span><span class="hs-tip">Deploy →</span></button>
+            <button class="hotspot" style="left:45%;top:81.5%;width:10%;height:6.5%" data-go="teaching" aria-label="Exit to briefing"><span class="hs-tip">Exit</span></button>
+          </div>
+          <!-- 03 LIVE — reconstructed, animated & interactive HUD -->
+          <div class="proto-screen lh-screen" data-screen="live">
+            <img class="lh-bg" src="assets/img/ui-hud.jpg" alt="Live operational HUD — vitals, heading and task progress" />
+            <div class="lh-scrim"></div>
+            <div class="lh" id="live-hud">
+              <!-- click-to-spray stage -->
+              <div class="lh-stage" data-spray></div>
+
+              <!-- crosshair + trajectory -->
+              <svg class="lh-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+                <g class="xh" transform="translate(775,395)">
+                  <circle r="26"/><line x1="-40" y1="0" x2="-14" y2="0"/><line x1="14" y1="0" x2="40" y2="0"/>
+                  <line x1="0" y1="-40" x2="0" y2="-14"/><line x1="0" y1="14" x2="0" y2="40"/>
+                </g>
+                <path class="water" d="M1300,560 Q1150,300 805,388"/>
+                <path class="arc"   d="M1300,560 Q1150,300 805,388"/>
+                <path class="ang" d="M1246,372 L1268,332 L1290,372"/>
+                <path class="ang" d="M1268,334 L1306,418"/>
+              </svg>
+              <div class="lh-angtxt">15°</div>
+
+              <!-- battery -->
+              <div class="lh-batt">
+                <div class="bt-row">
+                  <svg class="bt-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>
+                  <span class="bt-lbl">Battery life</span>
+                  <span class="bt-pct" data-batt>85%</span>
+                </div>
+                <div class="bt-track"><div class="bt-fill" data-batt-fill></div></div>
+              </div>
+
+              <!-- vitals -->
+              <div class="lh-panel lh-vital lh-hr">
+                <svg class="vt-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7.5-4.7-10-9.3C.6 9 1.5 5.6 4.4 4.6 6.5 3.9 8.6 4.7 12 8c3.4-3.3 5.5-4.1 7.6-3.4 2.9 1 3.8 4.4 2.4 7.1C19.5 16.3 12 21 12 21z"/></svg>
+                <div><div class="vt-k">Heart Rate</div><div class="vt-v"><span data-hr>96</span><small>BPM</small></div></div>
+              </div>
+              <div class="lh-panel lh-vital lh-o2">
+                <svg class="vt-ic" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2s7 7.6 7 13a7 7 0 1 1-14 0C5 9.6 12 2 12 2z"/></svg>
+                <div><div class="vt-k">Blood Oxygen</div><div class="vt-v"><span data-o2>98</span><small>%</small></div></div>
+              </div>
+
+              <!-- task progress -->
+              <div class="lh-panel lh-task">
+                <div class="tk-title">Task Progress</div>
+                <div class="tk" data-task="fire">
+                  <div class="tk-h"><span>Extinguish the main fire source</span><span class="cnt" data-fire-cnt>2/3</span></div>
+                  <div class="tk-bar"><div class="tk-bar-fill" data-fire-fill></div></div>
+                </div>
+                <div class="tk is-done">
+                  <div class="tk-h"><span>Test the door temperature</span><span class="done">✓ Completed</span></div>
+                  <div class="seg mini"><i class="on"></i><i class="gray on"></i><i></i></div>
+                </div>
+              </div>
+
+              <!-- note -->
+              <div class="lh-panel lh-note">
+                <div class="nt-h">NOTE</div>
+                <p data-note>Raise the hose to extinguish the fire ahead!</p>
+              </div>
+
+              <!-- spatial guidance -->
+              <div class="lh-go"><span class="ga">↑</span>Go upstairs</div>
+              <div class="lh-dist"><span class="d-v" data-dist>46m</span><span class="d-tri"></span></div>
+
+              <!-- compass -->
+              <div class="lh-compass">
+                <div class="cm-pin"></div>
+                <div class="cm-active"></div>
+                <div class="cm-mask"><div class="cm-track" data-compass></div></div>
+              </div>
+
+              <div class="lh-hint">Click the fire to spray · clear the source</div>
+
+              <button class="proto-prompt center lh-done" data-go="success">Mission accomplished <b>→</b></button>
+            </div>
+          </div>
+          <!-- 04 SUCCESS -->
+          <div class="proto-screen" data-screen="success">
+            <img src="assets/img/ui-success.jpg" alt="Mission success" />
+            <button class="proto-prompt center" data-go="eval">View after-action report <b>→</b></button>
+          </div>
+          <!-- 05 EVAL -->
+          <div class="proto-screen" data-screen="eval">
+            <img src="assets/img/ui-eval.jpg" alt="Data evaluation — reactivity, efficiency, accuracy and squad ranking" />
+            <button class="proto-prompt bl" data-go="teaching">Restart drill <b>↺</b></button>
+          </div>
+
+          <div class="proto-fx"></div>
+        </div>
+      </div>
+
+      <div class="proto-bar">
+        <div class="proto-steps">
+          <button class="proto-step on" aria-label="Teaching Model"><span class="ps-bar"></span><span class="ps-lbl">01 Teaching</span></button>
+          <button class="proto-step" aria-label="Ready to Deploy"><span class="ps-bar"></span><span class="ps-lbl">02 Ready</span></button>
+          <button class="proto-step" aria-label="Live HUD"><span class="ps-bar"></span><span class="ps-lbl">03 Live HUD</span></button>
+          <button class="proto-step" aria-label="Mission Success"><span class="ps-bar"></span><span class="ps-lbl">04 Success</span></button>
+          <button class="proto-step" aria-label="Data Evaluation"><span class="ps-bar"></span><span class="ps-lbl">05 Report</span></button>
+        </div>
+        <div class="proto-nav">
+          <button class="pn-prev" aria-label="Previous screen">‹</button>
+          <button class="pn-next" aria-label="Next screen">›</button>
+          <button class="pn-restart" aria-label="Restart">↺ Restart</button>
+          <button class="pn-full" aria-label="Fullscreen">⤢</button>
+        </div>
+      </div>
+
+      <div class="proto-meta">
+        <span class="pm-step">01 · Prior to entry</span>
+        <h4 class="pm-title">Teaching Model</h4>
+        <p class="pm-desc">Mission briefing overlay — the fire-scene map, heat-affected structures (A/B) and points of ignition, reviewed before entry. Confirm to stand by.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 07 ASSESSMENT ============ -->
+<section id="assessment" class="section" data-screen-label="Assessment">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <div class="section-num">07</div>
+      <div class="htext">
+        <span class="kicker">Data-Driven</span>
+        <span class="section-title">Assessment &amp; Feedback</span>
+        <p class="lead">Complete the training and obtain the analysis report. Every action is scored, compared to the trainee's own history, and ranked against the squad.</p>
+      </div>
+    </div>
+
+    <div class="assess">
+      <div class="reveal d1">
+        <div class="rings">
+          <div class="ring-card">
+            <div class="rname"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Reactivity</div>
+            <div class="ring-wrap" data-val="64">
+              <svg width="116" height="116" viewBox="0 0 116 116"><circle class="track" cx="58" cy="58" r="50"/><circle class="prog" cx="58" cy="58" r="50"/></svg>
+              <div class="pct">0%</div>
+            </div>
+            <div class="delta up"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10h-5v6H9v-6H4z"/></svg><span>Reaction <b>+12%</b> vs. before</span></div>
+          </div>
+          <div class="ring-card">
+            <div class="rname"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M13 2L3 14h7l-1 8 10-12h-7z"/></svg>Efficiency</div>
+            <div class="ring-wrap" data-val="47">
+              <svg width="116" height="116" viewBox="0 0 116 116"><circle class="track" cx="58" cy="58" r="50"/><circle class="prog" cx="58" cy="58" r="50"/></svg>
+              <div class="pct">0%</div>
+            </div>
+            <div class="delta down"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 20l-8-10h5V4h6v6h5z"/></svg><span>Speed <b>-6%</b> vs. before</span></div>
+          </div>
+          <div class="ring-card">
+            <div class="rname"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="4"/><line x1="12" y1="1" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="1" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="23" y2="12"/></svg>Accuracy</div>
+            <div class="ring-wrap" data-val="92">
+              <svg width="116" height="116" viewBox="0 0 116 116"><circle class="track" cx="58" cy="58" r="50"/><circle class="prog" cx="58" cy="58" r="50"/></svg>
+              <div class="pct">0%</div>
+            </div>
+            <div class="delta up"><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l8 10h-5v6H9v-6H4z"/></svg><span>Hit rate <b>+24%</b> vs. before</span></div>
+          </div>
+        </div>
+
+        <div class="report-shot">
+          <img src="assets/img/ui-eval.jpg" alt="In-headset data evaluation report" />
+          <div class="rcap">As seen in the headset · Data Evaluation</div>
+        </div>
+      </div>
+
+      <div class="verdict reveal d2">
+        <div class="vhead">
+          <div class="grade">GREAT</div>
+          <div class="lvl"><div class="num">7</div><div class="cap">Badge Level</div></div>
+        </div>
+        <div class="vbody">
+          <div class="who">Firefighter · Royi</div>
+          <p class="eval">Actions performed accurately, reactions quick, high fire-extinguishing success rate.</p>
+          <div class="board">
+            <div class="row"><span class="rk">4</span><span class="nm">Benjamin</span><span class="lv">12<small>LV</small></span></div>
+            <div class="row"><span class="rk">5</span><span class="nm">Charlotte</span><span class="lv">10<small>LV</small></span></div>
+            <div class="row"><span class="rk">6</span><span class="nm">Sophia</span><span class="lv">9<small>LV</small></span></div>
+            <div class="row you"><span class="rk">7</span><span class="nm">Royi <span class="you-tag">· YOU</span></span><span class="lv">7<small>LV</small></span></div>
+            <div class="row"><span class="rk">8</span><span class="nm">Michael</span><span class="lv">7<small>LV</small></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div class="big reveal">Fire<b>pulse</b></div>
+      <div class="credits reveal d1">
+        Concept &amp; UX — Your Name<br/>
+        MR Fireground Training System<br/>
+        Concept Project · <span id="year">2025</span>
+      </div>
+    </div>
+    <p class="note reveal d2">Realistic · Tactical · Measured — train under pressure, without the danger.</p>
+  </div>
+</footer>
+
+<script>
+  window.__UI_FLOW = [];
+</script>
+<script src="assets/site.js"></script>
+<script src="assets/premium.js"></script>
+<script src="assets/screens.js"></script>
+<script src="assets/livehud.js"></script>
+<script src="assets/cover.js"></script>
+
+<div id="tweaks-root"></div>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="tweaks-app.jsx"></script>
+<script>
+(async () => {
+  // Prepend so page-supplied @page / break rules (deck-stage's margin:0,
+  // author CSS) keep source-order precedence over the baseline.
+  const baseCss = document.createElement('style');
+  baseCss.textContent = "@media print {\n  @page { margin: 0.5cm; }\n  html, body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }\n  section, article, figure, table { break-inside: avoid; }\n  *, *::before, *::after {\n    animation-delay: -99s !important; animation-duration: .001s !important;\n    animation-iteration-count: 1 !important; animation-fill-mode: both !important;\n    animation-play-state: running !important; transition-duration: 0s !important;\n  }\n}";
+  document.head.prepend(baseCss);
+  if (document.readyState === 'loading') {
+    await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+  }
+  let ds = document.querySelector('deck-stage');
+  // whenDefined never resolves when nothing registers the element, so only
+  // await it when a <deck-stage> tag exists (and race a timeout regardless).
+  if (ds && !customElements.get('deck-stage')) {
+    try {
+      await Promise.race([
+        customElements.whenDefined('deck-stage'),
+        new Promise((r) => setTimeout(r, 3000)),
+      ]);
+    } catch (e) {}
+    ds = document.querySelector('deck-stage');
+  }
+  // dc-runtime assigns window.DCLogic at init and mounts into #dc-root on
+  // DOMContentLoaded; settle on that subtree so React has rendered before
+  // print(). Non-DC pages fall through to weighing body.
+  const isDc = !ds && 'DCLogic' in window;
+  const settleRoot = ds || (isDc ? document.getElementById('dc-root') : null) || document.body;
+  if (settleRoot) {
+    // Weigh only content children — skip script/style/template so inline
+    // Babel/CSS doesn't register as stable "content" before the framework
+    // has mounted anything.
+    const MEDIA = 'img,svg,canvas,video,picture,iframe,embed,object';
+    const weigh = () => {
+      let text = 0, media = 0;
+      for (const c of settleRoot.children) {
+        const t = c.tagName;
+        if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+        text += (c.textContent || '').trim().length;
+        media += c.querySelectorAll(MEDIA).length + (c.matches(MEDIA) ? 1 : 0);
+      }
+      return text + media * 100;
+    };
+    // "Non-zero and stable" alone is not sufficient to mean rendered: generic
+    // body can carry a static shell while async main content is pending, and
+    // #dc-root can carry the root DC's static text while child refs are still
+    // .sc-placeholder boxes. Gate generic on readyState 'complete', and never
+    // accept stability while a dc-runtime placeholder is present.
+    const isGeneric = settleRoot === document.body;
+    const deadline = Date.now() + 15000;
+    let last = -1, stable = 0;
+    while (Date.now() < deadline) {
+      const n = weigh();
+      const ready =
+        (!isGeneric || document.readyState === 'complete') &&
+        !settleRoot.querySelector('.sc-placeholder');
+      if (n > 0 && n === last && ready) { if (++stable >= 2) break; } else { stable = 0; }
+      last = n;
+      await new Promise((r) => setTimeout(r, 250));
+    }
+  }
+  try { await document.fonts.ready; } catch (e) {}
+  // Jump every animation to its end state so print() never captures a slide
+  // mid-entrance. Ordering matters: the 0s-transition style must be live
+  // BEFORE data-deck-active is set so attribute-keyed transitions don't
+  // start a (now-0s) run from the pre-active base.
+  const st = document.createElement('style');
+  st.textContent = '*,*::before,*::after{animation-delay:-99s !important;animation-duration:.001s !important;animation-iteration-count:1 !important;animation-fill-mode:both !important;animation-play-state:running !important;transition-duration:0s !important}';
+  document.head.appendChild(st);
+  for (const d of document.querySelectorAll('deck-stage')) {
+    for (const c of d.children) {
+      const t = c.tagName;
+      if (t === 'SCRIPT' || t === 'STYLE' || t === 'TEMPLATE') continue;
+      c.setAttribute('data-deck-active', '');
+    }
+  }
+  try {
+    const sweep = () => {
+      for (const a of document.getAnimations()) {
+        try { a.finish(); } catch (e) {
+          try { a.currentTime = (a.effect && a.effect.getComputedTiming().duration) || 0; a.pause(); } catch (e2) {}
+        }
+      }
+    };
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+    sweep();
+    await new Promise((r) => requestAnimationFrame(r));
+  } catch (e) {}
+  setTimeout(() => { try { window.print(); } catch (e) {} }, 200);
+})();
+</script>
+</body>
+</html>

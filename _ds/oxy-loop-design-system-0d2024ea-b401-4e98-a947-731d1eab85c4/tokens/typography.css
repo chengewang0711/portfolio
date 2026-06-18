@@ -1,0 +1,41 @@
+/* ============================================================
+   Oxy Loop — Typography tokens
+   Rounded geometric sans. Large, confident headings; generous
+   line-height; sentence case; strong bold for primary messages.
+   ============================================================ */
+
+:root {
+  /* ---- Families ---- */
+  --font-display: 'M PLUS Rounded 1c', 'SF Pro Rounded', 'Avenir Next Rounded', system-ui, sans-serif;
+  --font-text: 'Nunito', 'SF Pro Rounded', 'Nunito Sans', system-ui, sans-serif;
+
+  /* ---- Weights ---- */
+  --fw-regular: 400;     /* @kind font */
+  --fw-medium: 500;      /* @kind font */
+  --fw-semibold: 600;    /* @kind font */
+  --fw-bold: 700;        /* @kind font */
+  --fw-extrabold: 800;   /* @kind font */
+
+  /* ---- Type scale (per style guide) ----
+     H1 hero 44–56 · H2 page 32–40 · H3 section 20–24 · body 16–20 · caption 11–13 */
+  --text-hero: 3.25rem;     /* 52px */
+  --text-h1: 2.75rem;       /* 44px */
+  --text-h2: 2.25rem;       /* 36px */
+  --text-h3: 1.5rem;        /* 24px */
+  --text-title: 1.25rem;    /* 20px */
+  --text-body-lg: 1.125rem; /* 18px */
+  --text-body: 1rem;        /* 16px */
+  --text-label: 0.875rem;   /* 14px */
+  --text-caption: 0.75rem;  /* 12px */
+
+  /* ---- Line heights ---- */
+  --lh-tight: 1.08;     /* @kind other */
+  --lh-heading: 1.18;   /* @kind other */
+  --lh-snug: 1.35;      /* @kind other */
+  --lh-body: 1.55;      /* @kind other */
+
+  /* ---- Letter spacing ---- */
+  --ls-tight: -0.01em;  /* @kind other */
+  --ls-normal: 0;       /* @kind other */
+  --ls-label: 0.04em;   /* @kind other */
+}
